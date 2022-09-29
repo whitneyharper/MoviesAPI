@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using MoviesAPI.Data;
+
 namespace MoviesAPI
 {
     public class Program
@@ -7,6 +10,8 @@ namespace MoviesAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<MovieDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MovieDbConnection")));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
