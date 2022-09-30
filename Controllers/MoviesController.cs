@@ -6,7 +6,7 @@ using MoviesAPI.Models;
 
 namespace MoviesAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("movies")]
     [ApiController]
     public class MoviesController : ControllerBase
     {
@@ -25,6 +25,31 @@ namespace MoviesAPI.Controllers
                 return NotFound();
             }
             return await _db.Movies.ToListAsync();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Movie>> GetMovie(int id)
+        {
+            if (_db.Movies == null)
+            {
+                return NotFound();
+            }
+            var movie = await _db.Movies.FindAsync(id);
+
+            if(movie == null)
+            {
+                return NotFound();
+            }
+
+            return movie;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        {
+            _db.Movies.Add(movie);
+            await _db.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
         }
     }
 }
