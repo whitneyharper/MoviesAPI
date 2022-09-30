@@ -84,5 +84,25 @@ namespace MoviesAPI.Controllers
             return NoContent();
 
         }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteMovie(int id)
+        {
+            if(_db.Movies == null)
+            {;
+                return NotFound();
+            }
+
+            var movie = await _db.Movies.FindAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            _db.Movies.Remove(movie);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
