@@ -45,11 +45,44 @@ namespace MoviesAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        public async Task<ActionResult<Movie>> CreateMovie(Movie movie)
         {
             _db.Movies.Add(movie);
             await _db.SaveChangesAsync();
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> EditMovie(int id, Movie movie)
+        {
+            
+            if(id != movie?.Id)
+            {
+                return BadRequest();
+            }
+
+            _db.Entry(movie).State = EntityState.Modified;
+
+            try 
+            {
+                await _db.SaveChangesAsync();
+            } catch (DbUpdateConcurrencyException) 
+            {
+                var exist = await _db.Movies.FindAsync(id);
+
+
+                if (exist == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            
+            return NoContent();
+
         }
     }
 }
