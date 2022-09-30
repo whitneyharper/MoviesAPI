@@ -8,7 +8,11 @@ namespace MoviesAPI.Models
         public int Id { get; set; }
         [Required]
         public string? Title { get; set; }
-        public string? Genre { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        [Required]
+        public string? Genre { get; set; } 
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM-dd-yyyy}")]
+        public DateTime ReleaseDate { get; set; } 
     }
 }
